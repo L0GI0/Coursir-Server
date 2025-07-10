@@ -23,9 +23,6 @@ export const getCourse = async (req: Request, res: Response): Promise<void> => {
     const { courseId } = req.params;
 
     try {
-
-        console.log(`Course id = ${courseId}`);
-
         const course = await Course.get(courseId);
 
         if(!course) {

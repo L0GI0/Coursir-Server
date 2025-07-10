@@ -5,7 +5,7 @@ import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
 import * as dynamoose from "dynamoose";
-import { createClerkClient } from '@clerk/express';
+import { clerkMiddleware, createClerkClient, requireAuth } from '@clerk/express';
 
 /* ROUTE INPUTS */
 import courseRoutes from "./routes/courseRoutes";
@@ -33,8 +33,10 @@ app.use(helmet());
 app.use(helmet.crossOriginResourcePolicy({policy: "cross-origin"}));
 app.use(morgan("common"));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}))
+app.use(bodyParser.urlencoded({extended: false}));
 app.use(cors());
+app.use(clerkMiddleware());
+app.use("/users/clerk", requireAuth(), userClerkRoutes);
 
 /* ROUTES */
 app.get("/", (req, res) => {
