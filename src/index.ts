@@ -10,6 +10,7 @@ import { clerkMiddleware, createClerkClient, requireAuth } from '@clerk/express'
 /* ROUTE INPUTS */
 import courseRoutes from "./routes/courseRoutes";
 import userClerkRoutes from "./routes/userClerkRoutes";
+import transactionRoutes from './routes/transactionRoutes';
 
 
 /* CONFIGURATIONS */
@@ -36,15 +37,15 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cors());
 app.use(clerkMiddleware());
-app.use("/users/clerk", requireAuth(), userClerkRoutes);
 
 /* ROUTES */
 app.get("/", (req, res) => {
     res.send("Hello World");
 })
 
-app.use("/courses", courseRoutes)
-app.use("/users/clerk", userClerkRoutes)
+app.use("/courses", courseRoutes);
+app.use("/users/clerk", requireAuth(), userClerkRoutes);
+app.use("/transactions", requireAuth(), transactionRoutes);
 
 /* SERVER */
 const port = process.env.PORT || 3000;
