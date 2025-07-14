@@ -40,8 +40,10 @@ export const getCourse = async (req: Request, res: Response): Promise<void> => {
 
 export const createCourse = async (req: Request, res: Response): Promise<void> => {
 
+
     try {
         const { teacherId, teacherName } = req.body;
+
 
         if(!teacherId || !teacherName) {
             res.status(400).json({ message: "Teacher id and name a required"});
@@ -79,8 +81,6 @@ export const updateCourse = async (req: Request, res: Response): Promise<void> =
     const { userId } = getAuth(req);
 
     try {
-        const { teacherId, teacherName } = req.body;
-
         const course = await Course.get(courseId);
 
         if(!course) {
@@ -93,14 +93,10 @@ export const updateCourse = async (req: Request, res: Response): Promise<void> =
             return;
         }
 
-        if(!teacherId || !teacherName) {
-            res.status(400).json({ message: "Teacher id and name a required"});
-            return;
-        }
-
         if(updateData.price) {
             const price = parseInt(updateData.price);
-            if(!isNaN(price)){
+            console.log(`price = ${price} !isNaN(price) = ${!isNaN(price)}`)
+            if(isNaN(price)){
                 res.status(400).json({
                     message: "Invalid price format",
                     error: "Price must be a valid number"})
